@@ -1,0 +1,79 @@
+<div class="container mt-5 px-md-5">
+  <h4>推薦餐廳</h4>
+  <form method="POST" action="/lists">
+    <div class="input-group">
+      <label for="name" class="col-md-2 col-form-label">
+        餐廳名稱
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="name" id="name" class="form-control" placeholder="請輸入餐廳名稱"
+          aria-label="Add Restaurant Name" required>
+      </div>
+
+      <label for="nameEn" class="col-md-2 col-form-label">
+        餐廳英文名稱
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="nameEn" id="nameEn" class="form-control" placeholder="請輸入餐廳英文名稱"
+          aria-label="Add Restaurant Name In English">
+      </div>
+
+      <label for="category" class="col-md-2 col-form-label">
+        餐廳種類
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="category" id="category" class="form-control" placeholder="請輸入餐廳種類(例如：日本料理、酒吧)"
+          aria-label="Add Restaurant Category" required>
+      </div>
+
+      <label for="image" class="col-md-2 col-form-label">
+        餐廳相片網址
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="image" id="image" class="form-control" placeholder="請輸入餐廳相片網址"
+          aria-label="Add Restaurant Image" required>
+      </div>
+
+      <label for="location" class="col-md-2 col-form-label">
+        餐廳相片網址
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="location" id="location" class="form-control" placeholder="請輸入餐廳地址"
+          aria-label="Add Restaurant Location" required>
+      </div>
+
+      <label for="phone" class="col-md-2 col-form-label">
+        餐廳電話
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="phone" id="phone" class="form-control" placeholder="請輸入餐廳電話"
+          aria-label="Add Restaurant Phone Number" required>
+      </div>
+
+      <label for="googleMap" class="col-md-2 col-form-label">
+        餐廳Google地圖網址
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="googleMap" id="googleMap" class="form-control" placeholder="請輸入餐廳Google地圖網址"
+          aria-label="Add Restaurant Google Map" required>
+      </div>
+
+      <label for="rating" class="col-md-2 col-form-label">
+        餐廳評價
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="rating" id="rating" class="form-control" placeholder="請輸入餐廳評價(請輸入0~5的數字)"
+          aria-label="Add Restaurant Rating" min="0" max="5">
+      </div>
+
+      <label for="discription" class="col-md-2 col-form-label">
+        餐廳描述
+      </label>
+      <div class="col-md-10 mb-2">
+        <input type="text" name="discription" id="discription" class="form-control" placeholder="請輸入餐廳描述"
+          aria-label="Add Restaurant Discription" required>
+      </div>
+    </div>
+    <button class="btn btn-warning mb-2" type="submit">提交</button>
+  </form>
+</div>

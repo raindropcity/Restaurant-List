@@ -18,13 +18,14 @@
   </div>
   <!-- restaurant list -->
   <div class="container mt-5 px-md-5">
+    <a href="./lists/new" class="btn btn-warning mb-2">推薦餐廳</a>
     <div class="row">
       {{!-- handlebars中有#each迴圈可以使用，要搭配陣列 --}}
       <!-- 所有包在{{#each movies}}跟{{/each}}中間的東西都會迭代生成 -->
       {{!-- 需要迭代變化的地方要寫this --}}
-      {{#each restaurants}}
+      {{#each lists}}
       <div class="col-12 col-sm-6 col-md-4">
-        <a href="/restaurants/{{this.id}}" class="text-secondary">
+        <a href="/restaurants/{{this._id}}" class="text-secondary">
           <div class="card mb-3">
             <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}" />
             <div class="card-body p-3">
