@@ -58,20 +58,22 @@ app.get('/search', (req, res) => {
   // res.render('index', { restaurants: restaurants, keyword: keyword })
 })
 
+// 瀏覽一筆資料
 app.get('/restaurants/:restaurant_id', (req, res) => {
-  const restaurant = restaurantList.results.filter((restaurant) => {
-    return restaurant.id === Number(req.params.restaurant_id)
-  })
-
-  res.render('show', { restaurantList: restaurant[0] })
+  const id = req.params.restaurant_id
+  return List.findById(id)
+    .lean()
+    .then((restaurant) => { res.render('show', { restaurantList: restaurant }) })
+    .catch((error) => { console.log(error) })
 })
 
 // 新增一筆資料
-app.get('/lists/new', (req, res) => {
+app.get('/restaurants/lists/new', (req, res) => {
+  // 按「推薦餐廳」按鈕時，render new.hbs
   res.render('new')
 })
 
-app.post('/lists', (req, res) => {
+app.post('/restaurants/lists', (req, res) => {
   const body = req.body
   return List.create({
     name: body.name,
