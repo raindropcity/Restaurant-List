@@ -90,6 +90,35 @@ app.post('/restaurants/lists', (req, res) => {
     .catch((error) => { console.log(error) })
 })
 
+// 修改一筆餐廳資料
+app.get('/restaurants/lists/:restaurant_id/edit', (req, res) => {
+  const id = req.params.restaurant_id
+  return List.findById(id)
+    .lean()
+    .then((restaurant) => { res.render('edit', { restaurantList: restaurant }) })
+    .catch((error) => { console.log(error) })
+})
+
+app.post('/restaurants/lists/:restaurant_id/edit', (req, res) => {
+  const id = req.params.restaurant_id
+  const body = req.body
+  return List.findById(id)
+    .then((restaurant) => {
+      restaurant.name = body.name;
+      restaurant.nameEn = body.nameEn;
+      restaurant.category = body.category;
+      restaurant.image = body.image;
+      restaurant.location = body.location;
+      restaurant.phone = body.phone;
+      restaurant.googleMap = body.googleMap;
+      restaurant.rating = body.rating;
+      restaurant.description = body.description;
+      return restaurant.save()
+    })
+    .then(() => { res.redirect(`/restaurants/${id}`) })
+    .catch((error) => { console.log(error) })
+})
+
 // 監聽並啟動伺服器
 app.listen(port, () => {
   console.log(`Restaurant list server started on localhost:${port}!`)

@@ -27,14 +27,12 @@ const listSchema = new Schema({
   },
   google_map: {
     type: String,
-    require: true
   },
   rating: {
     type: Number,
   },
   description: {
     type: String,
-    require: true
   }
 })
 
