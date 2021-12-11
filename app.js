@@ -1,7 +1,6 @@
 // 從node module中載入Express與Express-Handlebars
 const express = require('express')
 const exphbs = require('express-handlebars')
-const restaurantList = require('./restaurant.json')
 const app = express()
 
 // 載入list.js
@@ -45,17 +44,19 @@ app.get('/', (req, res) => {
 
 })
 
-app.get('/search', (req, res) => {
+app.get('/restaurants/search', (req, res) => {
   const keyword = req.query.keyword.trim()
-  const restaurants = restaurantList.results.filter(restaurant => {
-    return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword)
-  })
-  res.render('index', { restaurants: restaurants, keyword: keyword })
-
-  // const restaurants = List.find().filter(restaurant => {
+  // const restaurants = restaurantList.results.filter(restaurant => {
   //   return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword)
   // })
   // res.render('index', { restaurants: restaurants, keyword: keyword })
+
+  List.find().lean().then((collection) => {
+    const foundArray = collection.filter((restaurant) => {
+      return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword.toLowerCase())
+    })
+    res.render('index', { lists: foundArray, keyword: keyword })
+  })
 })
 
 // 瀏覽一筆資料
