@@ -1,6 +1,9 @@
 // 從node module中載入Express與Express-Handlebars
 const express = require('express')
 const exphbs = require('express-handlebars')
+// 引用method-override套件，它是Express的中介軟體，中介軟體是在request傳進來時進行處理流程，再接續到response的套件(例如body-parser也是中介軟體)。
+// 由於HTML中的<form>的method屬性只有GET或POST，無法使用RESTful風格的路由設計方式，因此使用method-override將應使用PUT、DELETE等HTTP動詞的路由，從GET或POST覆蓋為PUT或DELETE等原生HTML元素不支援的動詞。
+const methodOverride = require('method-override')
 const app = express()
 
 // 載入list.js
@@ -9,19 +12,10 @@ const List = require('./models/list')
 // Define localhost ralated variables
 const port = 3000
 
-// 載入Mongoose
-const mongoose = require('mongoose')
-// 定義資料庫連線狀態
-const dataBase = mongoose.connection
-mongoose.connect('mongodb://localhost/restaurant_list', { useNewUrlParser: true, useUnifiedTopology: true })
-
-dataBase.on('error', () => {
-  console.log('MongoDB error')
-})
-
-dataBase.once('open', () => {
-  console.log('MongoDB connected')
-})
+// 引用Mongoose連線設定。這邊沒有將require存入const中，是因為mongoose.js中所寫的module.exports匯出的東西是dataBase，是要給seeder.js使用的，且app.js裡後續也沒有要再用到此連線設定。因此這邊直接寫require('./config/mongoose')，代表在執行app.js時一併執行mongoose.js。
+require('./config/mongoose')
+// 引入路由器時，路徑設定為 /routes 就會自動去尋找目錄下叫做 index 的檔案。
+const routes = require('./routes')
 
 // 告訴Express模板引擎要使用Handlebars
 // app.engine()解釋：定義要使用的樣板引擎。第一個參數是這個樣板引擎的名稱(就是副檔名)；第二個參數是放入和此樣板引擎相關的設定。這裡設定了預設的佈局(default layout)需使用名為main的檔案。 所以Express會去抓main.handlebars這支檔案。
@@ -34,100 +28,12 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
-// 設定路由
-app.get('/', (req, res) => {
-  List.find().lean().then((lists) => {
-    // res.render()是指Express會「回傳HTML來呈現前端樣板」
-    res.render('index', { lists: lists })
-  })
-    .catch((error) => { console.log(error) })
+// _method是method-override的一個參數。用途是在HTML元素中的路由設定裡加入「?_method=DELETE」(見index.hbs頁面中DELETE按鈕的<form>的action設定)，method-override會幫我們將「?_method」後面的內容(這邊是以DELETE為例)轉換成controller頁(就是app.js)所設定的HTTP方法(以app.delete()為例)。
+app.use(methodOverride('_method'))
 
-})
-
-app.get('/restaurants/search', (req, res) => {
-  const keyword = req.query.keyword.trim()
-  // const restaurants = restaurantList.results.filter(restaurant => {
-  //   return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword)
-  // })
-  // res.render('index', { restaurants: restaurants, keyword: keyword })
-
-  List.find().lean().then((collection) => {
-    const foundArray = collection.filter((restaurant) => {
-      return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword.toLowerCase())
-    })
-    res.render('index', { lists: foundArray, keyword: keyword })
-  })
-})
-
-// 瀏覽一筆資料
-app.get('/restaurants/:restaurant_id', (req, res) => {
-  const id = req.params.restaurant_id
-  return List.findById(id)
-    .lean()
-    .then((restaurant) => { res.render('show', { restaurantList: restaurant }) })
-    .catch((error) => { console.log(error) })
-})
-
-// 新增一筆資料
-app.get('/restaurants/lists/new', (req, res) => {
-  // 按「推薦餐廳」按鈕時，render new.hbs
-  res.render('new')
-})
-
-app.post('/restaurants/lists', (req, res) => {
-  const body = req.body
-  return List.create({
-    name: body.name,
-    name_en: body.nameEn,
-    category: body.category,
-    image: body.image,
-    location: body.location,
-    phone: body.phone,
-    google_map: body.googleMap,
-    rating: body.rating,
-    description: body.description
-  })
-    .then(() => { res.redirect('/') })
-    .catch((error) => { console.log(error) })
-})
-
-// 修改一筆餐廳資料
-app.get('/restaurants/lists/:restaurant_id/edit', (req, res) => {
-  const id = req.params.restaurant_id
-  return List.findById(id)
-    .lean()
-    .then((restaurant) => { res.render('edit', { restaurantList: restaurant }) })
-    .catch((error) => { console.log(error) })
-})
-
-app.post('/restaurants/lists/:restaurant_id/edit', (req, res) => {
-  const id = req.params.restaurant_id
-  const body = req.body
-  return List.findById(id)
-    .then((restaurant) => {
-      restaurant.name = body.name;
-      restaurant.nameEn = body.nameEn;
-      restaurant.category = body.category;
-      restaurant.image = body.image;
-      restaurant.location = body.location;
-      restaurant.phone = body.phone;
-      restaurant.googleMap = body.googleMap;
-      restaurant.rating = body.rating;
-      restaurant.description = body.description;
-      return restaurant.save()
-    })
-    .then(() => { res.redirect(`/restaurants/${id}`) })
-    .catch((error) => { console.log(error) })
-})
-
-// 刪除一筆特定資料
-app.post('/restaurants/lists/:restaurant_id/delete', (req, res) => {
-  const id = req.params.restaurant_id
-  return List.findById(id)
-    .then((restaurant) => restaurant.remove())
-    .then(() => { res.redirect('/') })
-    .catch((error) => { console.log(error) })
-})
+// routes是上面設定的變數，用來存放「總路由(/routes/index.js)」。而總路由用來整合各種頁面、功能所需的路由分支。
+// 例如「首頁」路由設定於/routes/modules/home.js中；「CRUD」路由設定於/routes/modules/todos中。之後一併匯總到總路由/routes/index.js，於此(app.js)引用之。
+app.use(routes)
 
 // 監聽並啟動伺服器
 app.listen(port, () => {

@@ -1,9 +1,9 @@
 <div class="container mt-5 px-md-5">
   <h4>修改餐廳資訊</h4>
-  <form method="POST" action="/restaurants/lists/{{restaurantList._id}}/edit">
+  <form method="POST" action="/restaurants/lists/{{restaurantList._id}}?_method=PUT">
     <div class="input-group">
       <label for="name" class="col-md-2 col-form-label">
-        餐廳名稱
+        餐廳名稱*
       </label>
       <div class="col-md-10 mb-2">
         <input type="text" name="name" id="name" class="form-control" placeholder="請輸入餐廳名稱"
@@ -19,7 +19,7 @@
       </div>
 
       <label for="category" class="col-md-2 col-form-label">
-        餐廳種類
+        餐廳種類*
       </label>
       <div class="col-md-10 mb-2">
         <input type="text" name="category" id="category" class="form-control" placeholder="請輸入餐廳種類(例如：日本料理、酒吧)"
@@ -27,7 +27,7 @@
       </div>
 
       <label for="image" class="col-md-2 col-form-label">
-        餐廳相片網址
+        餐廳相片網址*
       </label>
       <div class="col-md-10 mb-2">
         <input type="URL" name="image" id="image" class="form-control" placeholder="請輸入餐廳相片網址"
@@ -35,7 +35,7 @@
       </div>
 
       <label for="location" class="col-md-2 col-form-label">
-        餐廳地址
+        餐廳地址*
       </label>
       <div class="col-md-10 mb-2">
         <input type="text" name="location" id="location" class="form-control" placeholder="請輸入餐廳地址"
@@ -43,7 +43,7 @@
       </div>
 
       <label for="phone" class="col-md-2 col-form-label">
-        餐廳電話
+        餐廳電話*
       </label>
       <div class="col-md-10 mb-2">
         <input type="text" name="phone" id="phone" class="form-control" placeholder="請輸入餐廳電話"

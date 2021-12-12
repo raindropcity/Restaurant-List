@@ -47,7 +47,7 @@
           <div id="anchor-containter" class="col-4">
             <a href="./restaurants/lists/{{this._id}}/edit" class="btn btn-secondary mb-1">修改資訊</a>
           </div>
-          <form method="POST" action="/restaurants/lists/{{this._id}}/delete" class="col-4">
+          <form method="POST" action="/restaurants/lists/{{this._id}}?_method=DELETE" class="col-4">
             <button type="submit" class="btn btn-danger">刪除餐廳</button>
           </form>
         </div>
