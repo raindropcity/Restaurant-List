@@ -1,7 +1,7 @@
 <div class="container mt-5">
   <!-- search bar -->
-  <div class="container search-bar">
-    <div class="search-bar-outer">
+  <div class="container search-bar row justify-content-between">
+    <div class="search-bar-outer col-4">
       <div class="search-bar-inner">
         <form action="/restaurants/search">
           <h4 class="mb-2">尋找餐廳：</h4>
@@ -15,17 +15,29 @@
         </form>
       </div>
     </div>
+    <div class="col-4"></div>
+    <div class="dropdown col-4" style="text-align: right;">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-expanded="false">
+        自訂排列
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">A > Z</a>
+        <a class="dropdown-item" href="#">Z > A</a>
+        <a class="dropdown-item" href="#">類別</a>
+        <a class="dropdown-item" href="#">地區</a>
+      </div>
+    </div>
   </div>
   <!-- restaurant list -->
-  <div class="container mt-5 px-md-5">
-    <a href="./restaurants/lists/new" class="btn btn-warning mb-2">推薦餐廳</a>
+  <div class="container mt-3 px-md-5">
     <div class="row">
       {{!-- handlebars中有#each迴圈可以使用，要搭配陣列 --}}
       <!-- 所有包在{{#each movies}}跟{{/each}}中間的東西都會迭代生成 -->
       {{!-- 需要迭代變化的地方要寫this --}}
       {{#each lists}}
       <div class="col-12 col-sm-6 col-md-4">
-        <a href="/restaurants/{{this._id}}" class="text-secondary">
+        <a href="/restaurants/{{this._id}}" class="text-secondary" data-toggle="tooltip" title="For more information of this restaurant, please click the picture!">
           <div class="card mb-1">
             <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}" />
             <div class="card-body p-3">
